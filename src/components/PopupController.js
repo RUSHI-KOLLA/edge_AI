@@ -3,7 +3,7 @@
  * Main UI component for the extension popup
  */
 
-import { CONFIG } from '../../config/config.js';
+import { CONFIG } from '../config/config.js';
 import { formatTime, debounce, copyToClipboard } from '../utils/helpers.js';
 
 class PopupController {

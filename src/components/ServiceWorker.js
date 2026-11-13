@@ -3,7 +3,7 @@
  * Background script for the Chrome extension
  */
 
-import { CONFIG } from '../config/config.js';
+import { CONFIG } from '../config.js';
 
 class BackgroundService {
   constructor() {
