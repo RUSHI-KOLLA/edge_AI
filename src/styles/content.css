@@ -1,0 +1,176 @@
+/**
+ * Edge AI - Content Script Styles
+ * Injected into web pages
+ */
+
+.edge-ai-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  max-height: 500px;
+  background: var(--edge-ai-bg, #fff);
+  border: 1px solid var(--edge-ai-border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  z-index: 2147483647;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--edge-ai-text, #0f172a);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.edge-ai-overlay.visible {
+  display: flex;
+  animation: edge-ai-slide-up 0.3s ease;
+}
+
+@keyframes edge-ai-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.edge-ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--edge-ai-border, #e2e8f0);
+  background: var(--edge-ai-header-bg, #f8fafc);
+  cursor: move;
+}
+
+.edge-ai-title {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--edge-ai-text-secondary, #64748b);
+}
+
+.edge-ai-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--edge-ai-text-tertiary, #94a3b8);
+  padding: 0;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.edge-ai-close:hover {
+  background: var(--edge-ai-hover, #e2e8f0);
+  color: var(--edge-ai-text, #0f172a);
+}
+
+.edge-ai-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  max-height: 400px;
+}
+
+.edge-ai-transcript-item {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: var(--edge-ai-item-bg, #f1f5f9);
+  border-radius: 8px;
+  animation: edge-ai-fade-in 0.2s ease;
+}
+
+@keyframes edge-ai-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.edge-ai-transcript-text {
+  margin-bottom: 4px;
+}
+
+.edge-ai-transcript-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--edge-ai-text-tertiary, #94a3b8);
+}
+
+.edge-ai-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.edge-ai-badge.final { background: #dcfce7; color: #166534; }
+.edge-ai-badge.interim { background: #fef3c7; color: #92400e; }
+
+.edge-ai-tooltip {
+  position: fixed;
+  max-width: 300px;
+  padding: 12px 16px;
+  background: var(--edge-ai-bg, #fff);
+  border: 1px solid var(--edge-ai-border, #e2e8f0);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  z-index: 2147483646;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--edge-ai-text, #0f172a);
+  pointer-events: none;
+}
+
+.edge-ai-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--edge-ai-bg, #fff);
+  border-left: 1px solid var(--edge-ai-border, #e2e8f0);
+  border-top: 1px solid var(--edge-ai-border, #e2e8f0);
+  transform: rotate(45deg);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .edge-ai-overlay {
+    --edge-ai-bg: #1e293b;
+    --edge-ai-border: #334155;
+    --edge-ai-text: #f8fafc;
+    --edge-ai-text-secondary: #94a3b8;
+    --edge-ai-text-tertiary: #64748b;
+    --edge-ai-header-bg: #0f172a;
+    --edge-ai-hover: #334155;
+    --edge-ai-item-bg: #334155;
+  }
+}
+
+/* Selection highlight */
+.edge-ai-selection-highlight {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 2px;
+}
+
+/* Ensure our styles don't leak */
+.edge-ai-overlay * {
+  box-sizing: border-box;
+}
+
+.edge-ai-overlay button,
+.edge-ai-overlay select,
+.edge-ai-overlay input {
+  font-family: inherit;
+}

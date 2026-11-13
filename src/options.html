@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edge AI - Settings</title>
+  <link rel="stylesheet" href="../src/styles/main.css">
+  <style>
+    body {
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+    
+    .options-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .options-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .options-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .options-title svg {
+      width: 48px;
+      height: 48px;
+      color: var(--color-primary);
+    }
+    
+    .options-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+    }
+    
+    .options-sections {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .options-section {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+    }
+    
+    .section-header h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .section-header svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-primary);
+    }
+    
+    .section-body {
+      padding: 1.5rem;
+    }
+    
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+    
+    .setting-info {
+      flex: 1;
+    }
+    
+    .setting-label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .setting-description {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .setting-control {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .btn {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .btn-primary {
+      background: var(--color-primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+    }
+    
+    .btn-danger {
+      background: var(--color-error);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-fast);
+    }
+    
+    .toggle input:checked + .toggle-slider {
+      background: var(--color-primary);
+    }
+    
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(24px);
+    }
+    
+    .toggle input:focus-visible + .toggle-slider {
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+    
+    .select {
+      padding: 0.5rem 2.5rem 0.5rem 0.875rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+    }
+    
+    .select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+    
+    .theme-options {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .theme-option {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      text-align: center;
+    }
+    
+    .theme-option:hover {
+      border-color: var(--border-medium);
+    }
+    
+    .theme-option.active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+    
+    .theme-option svg {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    
+    .theme-option.active svg {
+      color: var(--color-primary);
+    }
+    
+    .theme-option span {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .danger-zone {
+      border-top: 1px solid var(--color-error-light);
+      margin-top: 1rem;
+      padding-top: 1.5rem;
+    }
+    
+    .danger-zone h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-error);
+      margin-bottom: 1rem;
+    }
+    
+    .keyboard-shortcuts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .shortcut {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+    }
+    
+    .shortcut-key {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .kbd {
+      padding: 0.25rem 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+    }
+    
+    .shortcut-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    @media (max-width: 640px) {
+      .options-title { font-size: 2rem; }
+      .setting-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .setting-control { width: 100%; justify-content: space-between; }
+      .theme-options { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="options-container">
+    <header class="options-header">
+      <h1 class="options-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        Edge AI Settings
+      </h1>
+      <p class="options-subtitle">Configure your translation and transcription experience</p>
+    </header>
+    
+    <div class="options-sections">
+      <!-- General Settings -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            General
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Theme</div>
+              <div class="setting-description">Choose your preferred color scheme</div>
+            </div>
+            <div class="theme-options" id="themeOptions">
+              <button class="theme-option active" data-theme="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+                <span>Light</span>
+              </button>
+              <button class="theme-option" data-theme="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <span>Dark</span>
+              </button>
+              <button class="theme-option" data-theme="auto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <span>Auto</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Default Language</div>
+              <div class="setting-description">Primary language for transcription</div>
+            </div>
+            <select class="select" id="defaultLanguage">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+            </select>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Font Size</div>
+              <div class="setting-description">Adjust text size in the popup</div>
+            </div>
+            <select class="select" id="fontSize">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Transcription Settings -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+            Transcription
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Real-time Transcription</div>
+              <div class="setting-description">Show live transcript while recording</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="realtimeTranscription" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Auto Punctuation</div>
+              <div class="setting-description">Automatically add punctuation to transcripts</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="autoPunctuation" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Profanity Filter</div>
+              <div class="setting-description">Filter inappropriate language from transcripts</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="profanityFilter">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Transcription Engine</div>
+              <div class="setting-description">Choose the speech recognition engine</div>
+            </div>
+            <select class="select" id="transcriptionEngine">
+              <option value="whisper">Whisper (Local)</option>
+              <option value="google">Google Speech API</option>
+              <option value="azure">Azure Speech Service</option>
+              <option value="browser">Browser Built-in</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Translation Settings -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Translation
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Auto Translate</div>
+              <div class="setting-description">Automatically translate transcripts to target language</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="autoTranslate" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Target Language</div>
+              <div class="setting-description">Default language for translations</div>
+            </div>
+            <select class="select" id="targetLanguage">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+            </select>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Translation Quality</div>
+              <div class="setting-description">Higher quality may be slower</div>
+            </div>
+            <select class="select" id="translationQuality">
+              <option value="fast">Fast</option>
+              <option value="balanced" selected>Balanced</option>
+              <option value="high">High Quality</option>
+            </select>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Show Original Text</div>
+              <div class="setting-description">Display original transcript alongside translation</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="showOriginal" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Keyboard Shortcuts -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01M4 12h.01"/>
+            </svg>
+            Keyboard Shortcuts
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="keyboard-shortcuts">
+            <div class="shortcut">
+              <div class="shortcut-key">
+                <kbd class="kbd">Ctrl</kbd><span>+</span><kbd class="kbd">Shift</kbd><span>+</span><kbd class="kbd">Space</kbd>
+              </div>
+              <span class="shortcut-desc">Start/Stop Recording</span>
+            </div>
+            <div class="shortcut">
+              <div class="shortcut-key">
+                <kbd class="kbd">Ctrl</kbd><span>+</span><kbd class="kbd">Shift</kbd><span>+</span><kbd class="kbd">E</kbd>
+              </div>
+              <span class="shortcut-desc">Open Extension Popup</span>
+            </div>
+            <div class="shortcut">
+              <div class="shortcut-key">
+                <kbd class="kbd">Space</kbd>
+              </div>
+              <span class="shortcut-desc">Toggle Recording (in popup)</span>
+            </div>
+            <div class="shortcut">
+              <div class="shortcut-key">
+                <kbd class="kbd">Esc</kbd>
+              </div>
+              <span class="shortcut-desc">Close Settings / Stop Recording</span>
+            </div>
+            <div class="shortcut">
+              <div class="shortcut-key">
+                <kbd class="kbd">Ctrl</kbd><span>+</span><kbd class="kbd">Enter</kbd>
+              </div>
+              <span class="shortcut-desc">Copy Transcript</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Data & Privacy -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Data & Privacy
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Save History Locally</div>
+              <div class="setting-description">Store transcripts and translations on your device</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="saveHistory" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Send Anonymous Usage Data</div>
+              <div class="setting-description">Help improve Edge AI with anonymous analytics</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="usageAnalytics">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Clear All Data</div>
+              <div class="setting-description">Remove all stored transcripts, translations, and settings</div>
+            </div>
+            <button class="btn btn-danger" id="clearData">Clear Data</button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- About -->
+      <section class="options-section">
+        <header class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4M12 8h.01"/>
+            </svg>
+            About
+          </h2>
+        </header>
+        <div class="section-body">
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Version</div>
+              <div class="setting-description">Current extension version</div>
+            </div>
+            <span style="color: var(--text-secondary); font-family: var(--font-mono);">1.0.0</span>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Check for Updates</div>
+              <div class="setting-description">Manually check for extension updates</div>
+            </div>
+            <button class="btn btn-secondary" id="checkUpdates">Check Now</button>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">View Source Code</div>
+              <div class="setting-description">Open the GitHub repository</div>
+            </div>
+            <a href="https://github.com/RUSHI-KOLLA/edge_AI" target="_blank" class="btn btn-secondary">GitHub</a>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Report an Issue</div>
+              <div class="setting-description">Found a bug? Let us know</div>
+            </div>
+            <a href="https://github.com/RUSHI-KOLLA/edge_AI/issues" target="_blank" class="btn btn-secondary">Report Issue</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <script type="module">
+    // Load settings from storage
+    async function loadSettings() {
+      const settings = await chrome.storage.sync.get(null);
+      
+      // Apply saved settings
+      document.getElementById('defaultLanguage').value = settings.language || 'en';
+      document.getElementById('fontSize').value = settings.fontSize || 'medium';
+      document.getElementById('realtimeTranscription').checked = settings.realtimeTranscription !== false;
+      document.getElementById('autoPunctuation').checked = settings.autoPunctuation !== false;
+      document.getElementById('profanityFilter').checked = settings.profanityFilter || false;
+      document.getElementById('transcriptionEngine').value = settings.transcriptionEngine || 'whisper';
+      document.getElementById('autoTranslate').checked = settings.autoTranslate !== false;
+      document.getElementById('targetLanguage').value = settings.targetLanguage || 'en';
+      document.getElementById('translationQuality').value = settings.translationQuality || 'balanced';
+      document.getElementById('showOriginal').checked = settings.showOriginal !== false;
+      document.getElementById('saveHistory').checked = settings.saveHistory !== false;
+      document.getElementById('usageAnalytics').checked = settings.usageAnalytics || false;
+      
+      // Theme
+      const theme = settings.theme || 'auto';
+      setActiveTheme(theme);
+      
+      // Apply font size
+      document.documentElement.style.fontSize = 
+        settings.fontSize === 'small' ? '14px' :
+        settings.fontSize === 'large' ? '18px' : '16px';
+    }
+    
+    function setActiveTheme(theme) {
+      document.querySelectorAll('.theme-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+        btn.setAttribute('aria-pressed', btn.dataset.theme === theme);
+      });
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    
+    // Save settings
+    function saveSettings(key, value) {
+      const data = { [key]: value };
+      chrome.storage.sync.set(data);
+    }
+    
+    // Theme selection
+    document.querySelectorAll('.theme-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        setActiveTheme(theme);
+        saveSettings('theme', theme);
+      });
+    });
+    
+    // Select inputs
+    const selectIds = ['defaultLanguage', 'fontSize', 'transcriptionEngine', 'targetLanguage', 'translationQuality'];
+    selectIds.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('change', () => saveSettings(id, el.value));
+    });
+    
+    // Checkbox inputs
+    const checkboxIds = ['realtimeTranscription', 'autoPunctuation', 'profanityFilter', 'autoTranslate', 'showOriginal', 'saveHistory', 'usageAnalytics'];
+    checkboxIds.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('change', () => saveSettings(id, el.checked));
+    });
+    
+    // Clear data
+    document.getElementById('clearData').addEventListener('click', async () => {
+      if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+        await chrome.storage.sync.clear();
+        await chrome.storage.local.clear();
+        alert('All data cleared. Settings reset to defaults.');
+        loadSettings();
+      }
+    });
+    
+    // Check updates
+    document.getElementById('checkUpdates').addEventListener('click', () => {
+      chrome.runtime.requestUpdateCheck((status) => {
+        if (status === 'update_available') {
+          alert('Update available! The extension will update automatically.');
+        } else if (status === 'no_update') {
+          alert('You have the latest version.');
+        } else {
+          alert('Update check failed. Please try again later.');
+        }
+      });
+    });
+    
+    // Initialize
+    loadSettings();
+  </script>
+</body>
+</html>
